@@ -7,9 +7,9 @@
         android:background="@color/colorAccent"
         android:gravity="center"
         android:layout_gravity="center"
-        android:textSize="20sp"
+        android:textSize="10sp"
         android:text="111"
         android:id="@+id/rv_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

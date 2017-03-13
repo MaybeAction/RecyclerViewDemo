@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,6 +27,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private View view;
     private OnItemClickListener onItemClickListener;
     private OnItemLongClickListener onItemLongClickListener;
+    private List<Integer> mHeights=new ArrayList<>();
+
+    public void setHeight(List<String> s,List<Integer> lists){
+
+    }
 
     public List<String> getList() {
         return list;
@@ -40,8 +46,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         inflater=inflater.from(context);
         list=new ArrayList();
     }
-    public void add(String str){
-        list.add(str);
+    public void add(List<String> str){
+        list.addAll(str);
 
     }
     @Override
@@ -58,7 +64,21 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                 holder.rc_tv.setOnClickListener(this);
                 holder.rc_tv.setOnLongClickListener(this);
                 holder.rc_tv.setTag(position);
-                holder.rc_tv.setWidth((int) (position%3+Math.random()*100)+1);
+
+
+                //瀑布流
+        ViewGroup.LayoutParams layoutParams=holder.rc_tv.getLayoutParams();
+                int mPosition=(int) (position%3+Math.random()*100)+10;
+                if(mPosition<20){
+                    mPosition+=20;
+                }
+                mHeights.add(mPosition);
+                layoutParams.height=mHeights.get(position);
+                holder.rc_tv.setLayoutParams(layoutParams);
+//                holder.rc_tv.setHeight(mPosition);
+
+//                holder.rc_tv.setWidth((int) (position%3+Math.random()*100)+1);
+
     }
 
     @Override
@@ -100,6 +120,15 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         onItemLongClickListener.onItemLongClick((Integer) view.getTag());
         //不设置为true不会触发点击
         return true;
+    }
+
+    //移动item
+    public void itemMoved(int fromPosition, int toPosition,List<String> strlist) {
+//        Collections.swap(strlist,fromPosition,toPosition);
+            list.clear();
+            list.addAll(strlist);
+        notifyItemMoved(fromPosition,toPosition);
+        notifyItemRangeChanged(fromPosition,strlist.size()-fromPosition);
     }
 
 
